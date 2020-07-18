@@ -55,6 +55,7 @@ $user = Auth::user();
                 <td><input type="number" id="level" placeholder="level menu" id="input-level"></td>
                 <td>
                   <select id="input-parent">
+                    <option value=""></option>
                     @foreach($allMenu as $parent)
                     <option value="{{ $parent->id }}">
                       {{ $parent->object_name }}
@@ -65,7 +66,7 @@ $user = Auth::user();
               </tr>
             </tbody>
           </table>
-          <button class="btn btn-primary" style="display: block; margin: 10px auto; max-width: 100px;" onclick="store()">Thêm mới</button>
+          <button class="btn btn-primary" style="display: block; margin: 10px auto; max-width: 100px;" onclick="storeAjax()">Thêm mới</button>
         </div><!-- /.box-body -->
         <div style="text-align: center; font-weight: bold;">Danh sách menu</div>
         @if($allMenu != null)
@@ -109,13 +110,15 @@ $user = Auth::user();
                     @else
                     Không hoạt động
                     @endif</a></td>
-                <td><input type="number" id="updatelevel-{{$url->id}}"></td>
+                <td><input type="number" id="updatelevel-{{$url->id}}" value="{{$url->object_level}}"></td>
                 <td>
                   <select name="" id="parent-{{$url->id}}">
+                    <option value=""></option>
                     @foreach($allMenu as $parent)
-                    <option value="{{ $parent->id }}" @php if($parent->id == $url->parent_id)
-                      echo "selected";
-                      @endphp>
+                    @if($parent->id == $url->id)
+                    @continue
+                    @endif
+                    <option value="{{ $parent->id }}" {{($parent->id == $url->parent_id) ? 'selected' : ''}}>
                       {{ $parent->object_name }}
                     </option>
                     @endforeach
@@ -125,7 +128,7 @@ $user = Auth::user();
                   <a id="edit-{{$url->id}}" class="btn btn-primary">Sửa</a>
                 </td>
                 <td>
-                  <a class="btn btn-danger" id="delete-{{$url->id}}">Xóa</a>
+                  <a class="btn btn-danger" onclick="destroyMenu('{{$url->id}}')" >Xóa</a>
                 </td>
               </tr>
               @endforeach
@@ -142,43 +145,9 @@ $user = Auth::user();
 $idMenu
 @endphp
 <script type="text/javascript">
-  var update = function(idMenu, type) {
-    var urlink;
-    var model;
-    if (type == 2) {
-      urlink = "{{ route('update.menu.show') }}";
-      model = "#show-";
-    } else {
-      urlink = "{{ route('update.menu.status') }}";
-      model = "#status-";
-    }
+  var storeAjax = function() {
     $.ajax({
-      url: urlink,
-      method: 'GET',
-      data: {
-        id: parseInt(idMenu)
-
-      },
-      success: function(result) {
-        $('#message').text(result.message);
-        model += idMenu;
-        if (result.status == 200) {
-          var text = null;
-          if (result.wish) {
-            text = "Hoạt động";
-          } else {
-            text = "Không hoạt động";
-          }
-          $(model).text(text);
-        }
-      }
-    });
-  };
-  var store = function() {
-    alert();
-    var urlink = "{{ route('object.store') }}";
-    $.ajax({
-      url: urlink,
+      url: "{{ route('objects.storeNew') }}",
       method: 'GET',
       data: {
         object_name: $('#nameurl').val(),
@@ -196,5 +165,52 @@ $idMenu
       }
     });
   };
+  var update = function(idMenu, type) {
+    var urlink;
+    var model;
+    if (type == 2) {
+      urlink = "{{ route('update.menu.show') }}";
+      model = "#show-";
+    } else {
+      urlink = "{{ route('update.menu.status') }}";
+      model = "#status-";
+    }
+    $.ajax({
+      url: urlink,
+      method: 'POST',
+      data: {
+        id: parseInt(idMenu)
+      },
+      success: function(result) {
+        $('#message').text(result.message);
+        model += idMenu;
+        if (result.status == 200) {
+          var text = null;
+          if (result.wish) {
+            text = "Hoạt động";
+          } else {
+            text = "Không hoạt động";
+          }
+          $(model).text(text);
+        }
+      }
+    });
+  };
+
+  var destroyMenu = function(idMenu) {
+    $.ajax({
+      url: "{{ route('objects.deleteNew') }}",
+      method: 'GET',
+      data: {
+        id: parseInt(idMenu)
+      },
+      success: function(result) {
+        $('#message').text(result.message);
+        if (result.status == 200) {          
+          $("#" + idMenu).remove();
+        }
+      }
+    });
+  } //end function destroyMenu
 </script>
 @endsection

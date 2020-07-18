@@ -11,7 +11,7 @@ class Objects extends Model
     [
         'parent_id', 'object_code', 'object_url', 'object_name',
         'description', 'object_level', 'status', 'show_menu',
-        'created_by', 'updated_by'
+        'created_by', 'updated_by', 'menu_name'
     ];
     public function childMenu (){
         return $this->hasMany(Objects::class, 'parent_id', 'id');

@@ -35,7 +35,8 @@ class User extends Authenticatable
                     'objects.object_name',
                     'objects.object_level',
                     'objects.status',
-                    'objects.show_menu'
+                    'objects.show_menu',
+                    'objects.menu_name'
                 )->get();
         }
         return DB::table('role_users')->where('user_id', $this->id)
@@ -47,7 +48,8 @@ class User extends Authenticatable
                 'objects.object_name',
                 'objects.object_level',
                 'objects.status',
-                'objects.show_menu'
+                'objects.show_menu',
+                'objects.menu_name'
             )
             ->distinct()->get();
     }

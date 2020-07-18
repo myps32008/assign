@@ -28,9 +28,11 @@ Route::group(['middleware' => ['check_auth', 'admin_menu']], function () {
         //return view('welcome');
         return view('layout');
     });
-    Route::get('objects/store', 'ObjectController@ajaxStore')->name('object.store');
+    Route::get('objects/store', 'ObjectController@ajaxStore')->name('objects.storeNew');
     Route::get('objects/updateStatus', 'ObjectController@updateStatus')->name('update.menu.status');
     Route::get('objects/updateShow', 'ObjectController@updateShow')->name('update.menu.show');
+    Route::get('objects/updateMenu', 'ObjectController@updateMenu')->name('objects.updateNew');
+    Route::get('objects/deleteMenu', 'ObjectController@deleteMenu')->name('objects.deleteNew');
     Route::resource('objects', 'ObjectController');
     Route::get('/dashboard', 'AdminController@show_dashboard')->name('show_dashboard');    
 });

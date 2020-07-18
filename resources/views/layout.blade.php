@@ -114,7 +114,7 @@
           @endif
           <li class="active treeview">
             <a href="#">
-              <i class="fa fa-dashboard"></i> <span>{{$route->object_name}}</span> <i class="fa fa-angle-left pull-right"></i>
+              <i class="fa fa-dashboard"></i> <span>{{$route->menu_name}}</span> <i class="fa fa-angle-left pull-right"></i>
             </a>
             @isset($route->childMenu)
             @if($route->childMenu->count() > 0)

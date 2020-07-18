@@ -54,15 +54,25 @@ class ObjectController extends Controller
     public function ajaxStore(Request $request)
     {
         try {
-            $data = json_decode($request->json()->all());
-            DB::table('objects')->insert($data);
+            $parent = $request->get('parent_id');
+            $level = $parent == null ? 1 : $request->get('object_level');
+            DB::table('objects')->insert([
+                'object_name' => $request->get('object_name'),
+                'object_url' => $request->get('object_url'),
+                'menu_name' => $request->get('menu_name'),
+                'parent_id' => $parent,
+                'object_code' => $request->get('object_code'),
+                'status' => $request->get('status'),
+                'show_menu' => $request->get('show_menu'),
+                'object_level' => $level
+            ]);
         } catch (\Throwable $th) {
             return Response()->json([
                 'message' => "Thêm menu mới thất bại. " . $th->getMessage(),
                 'status' => 400
             ]);
         }
-        $lastID =DB::table('objects')->orderByDesc('id')->select('id')->first();
+        $lastID = DB::table('objects')->orderByDesc('id')->select('id')->first();
         return Response()->json([
             'message' => "Thêm menu mới thành công. ",
             'newID' => $lastID,
@@ -147,5 +157,21 @@ class ObjectController extends Controller
                 'status' => 404
             ]);
         }
+    }
+    public function deleteMenu(Request $request)
+    {
+        try {
+            $menu = Objects::find($request->get('id'));
+            $menu->delete();
+        } catch (\Throwable $th) {
+            return Response()->json([
+                'message' => "Xoá menu thất bại: ".$th->getMessage(),
+                'status' => 404
+            ]);
+        }
+        return Response()->json([
+            'message' => "Xoá thành công",
+            'status' => 200
+        ]);
     }
 }
