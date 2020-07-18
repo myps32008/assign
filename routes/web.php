@@ -28,6 +28,7 @@ Route::group(['middleware' => ['check_auth', 'admin_menu']], function () {
         //return view('welcome');
         return view('layout');
     });
+    Route::get('objects/store', 'ObjectController@ajaxStore')->name('object.store');
     Route::get('objects/updateStatus', 'ObjectController@updateStatus')->name('update.menu.status');
     Route::get('objects/updateShow', 'ObjectController@updateShow')->name('update.menu.show');
     Route::resource('objects', 'ObjectController');

@@ -20,6 +20,7 @@ class CreateObjectsTable extends Migration
             $table->string('object_code', 50)->unique();
             $table->string('object_url', 500);
             $table->string('object_name', 100)->unique();
+            $table->string('menu_name', 100)->unique();
             $table->string('description', 500)->nullable();
             $table->integer('object_level');
             $table->boolean('status')->default(true);

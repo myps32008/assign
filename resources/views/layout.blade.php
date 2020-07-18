@@ -105,16 +105,18 @@
         <ul class="sidebar-menu">
           <li class="header">Danh sách chức năng</li>
           @php
-          $menu = session('menu');  
+          $menu = session('menu');
           @endphp
+          @if($menu != null)
           @foreach($menu as $route)
           @if($route->object_level > 1 || $route->show_menu == false || $route->status == false)
           @continue
           @endif
           <li class="active treeview">
             <a href="#">
-              <i class="fa fa-dashboard"></i> <span>$route->object_name</span> <i class="fa fa-angle-left pull-right"></i>
+              <i class="fa fa-dashboard"></i> <span>{{$route->object_name}}</span> <i class="fa fa-angle-left pull-right"></i>
             </a>
+            @isset($route->childMenu)
             @if($route->childMenu->count() > 0)
             <ul class="treeview-menu">
               @foreach($route->childMenu as $childMenu)
@@ -122,11 +124,14 @@
               @continue
               @endif
               <li><a href="{{ $childMenu->object_url }}"><i class="fa fa-circle-o"></i> {{$childMenu->object_name}}</a></li>
-              @endforeach
+              @endforeach <!-- sidebar menu: end menu child -->
             </ul>
             @endif
+            @endisset
           </li>
-          @endforeach
+          @endforeach <!-- sidebar menu: : end menu parent -->
+          @endif <!-- sidebar menu: : check menu not null -->
+          
         </ul>
       </section>
       <!-- /.sidebar -->

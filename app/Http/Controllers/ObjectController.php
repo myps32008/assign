@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Objects;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 use Response;
 
 class ObjectController extends Controller
@@ -16,7 +17,7 @@ class ObjectController extends Controller
     public function index()
     {
         $allMenu = Objects::with('parentMenu')->get();
-        return view('object.index',compact('allMenu'));
+        return view('object.index', compact('allMenu'));
     }
 
     /**
@@ -50,7 +51,24 @@ class ObjectController extends Controller
     {
         //
     }
-
+    public function ajaxStore(Request $request)
+    {
+        try {
+            $data = json_decode($request->json()->all());
+            DB::table('objects')->insert($data);
+        } catch (\Throwable $th) {
+            return Response()->json([
+                'message' => "Thêm menu mới thất bại. " . $th->getMessage(),
+                'status' => 400
+            ]);
+        }
+        $lastID =DB::table('objects')->orderByDesc('id')->select('id')->first();
+        return Response()->json([
+            'message' => "Thêm menu mới thành công. ",
+            'newID' => $lastID,
+            'status' => 200
+        ]);
+    }
     /**
      * Show the form for editing the specified resource.
      *
@@ -85,19 +103,49 @@ class ObjectController extends Controller
         //
     }
 
-    public function updateStatus(Request $request) {
-        $menu = Objects::find($request->get('id'));
-        if ($menu->status) {
-           $menu->status = false;
+    public function updateStatus(Request $request)
+    {
+        try {
+            $menu = Objects::find($request->get('id'));
+            if ($menu->status) {
+                $menu->status = false;
+            } else {
+                $menu->status = true;
+            }
+            $menu->save();
+            return Response()->json([
+                'message' => "Cập nhật trạng thái menu" . $menu->object_name . " thành công.",
+                'wish' => $menu->status,
+                'status' => 200
+            ]);
+        } catch (\Throwable $th) {
+            return Response()->json([
+                'message' => "Cập nhật trạng thái menu thất bại. " . $th->getMessage(),
+                'status' => 404
+            ]);
         }
-        else{
-            $menu->status = true; 
-        }
-        $menu->save();
-        return Response()->json(['message'=> 'Sửa thành công.', 'wish' => $menu->status]);
     }
 
-    public function updateShow(Request $request) {
-
+    public function updateShow(Request $request)
+    {
+        try {
+            $menu = Objects::find($request->get('id'));
+            if ($menu->show_menu) {
+                $menu->show_menu = false;
+            } else {
+                $menu->show_menu = true;
+            }
+            $menu->save();
+            return Response()->json([
+                'message' => "Cập nhật trạng thái menu" . $menu->object_name . " thành công.",
+                'wish' => $menu->show_menu,
+                'status' => 200
+            ]);
+        } catch (\Throwable $th) {
+            return Response()->json([
+                'message' => "Cập nhật trạng thái menu thất bại. " . $th->getMessage(),
+                'status' => 404
+            ]);
+        }
     }
 }
