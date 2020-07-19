@@ -40,7 +40,8 @@ Route::group(['middleware' => ['check_auth', 'admin_menu']], function () {
     Route::get('roles/edit', 'RoleController@edit')->name('role.edit');
     Route::get('roles/status', 'RoleController@updateStatus')->name('role.update.status');
 
-    Route::get('role_user/{id}', 'Role_UserController@index')->name('role_user.index');
+    Route::get('role_user/user/{id}', 'Role_UserController@index')->name('role_user.index');
+    Route::get('role_user/editRole', 'Role_UserController@editAjax')->name('role_user.edit');
 
     Route::get('role_object/{id}', 'Role_ObjectController@index')->name('role_object.index');
 
