@@ -18,7 +18,7 @@ class CreateRoleTable extends Migration
             $table->string('role_code', 50);
             $table->string('role_name', 200);
             $table->string('description', 500);
-            $table->integer('status');            
+            $table->boolean('status');            
             $table->string('created_by', 50)->nullable();
             $table->string('updated_by', 50)->nullable();
             $table->timestamps();

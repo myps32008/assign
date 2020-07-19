@@ -34,6 +34,11 @@ Route::group(['middleware' => ['check_auth', 'admin_menu']], function () {
     Route::get('objects/updateMenu', 'ObjectController@updateMenu')->name('objects.updateNew');
     Route::get('objects/deleteMenu', 'ObjectController@deleteMenu')->name('objects.deleteNew');
     Route::resource('objects', 'ObjectController');
+    Route::get('roles', 'RoleController@index')->name('role.index');
+    Route::get('roles/store', 'RoleController@store')->name('role.store');
+    Route::get('roles/destroy', 'RoleController@destroy')->name('role.delete');
+    Route::get('roles/edit', 'RoleController@edit')->name('role.edit');
+    Route::get('roles/status', 'RoleController@updateStatus')->name('role.update.status');
     Route::get('/dashboard', 'AdminController@show_dashboard')->name('show_dashboard');    
 });
 Route::group(['middleware' => 'admin_menu'], function () {

@@ -123,7 +123,7 @@
               @if($childMenu->show_menu == false || $childMenu->status == false)
               @continue
               @endif
-              <li><a href="{{ $childMenu->object_url }}"><i class="fa fa-circle-o"></i> {{$childMenu->object_name}}</a></li>
+              <li><a href="{{ $childMenu->object_url }}"><i class="fa fa-circle-o"></i> {{$childMenu->menu_name}}</a></li>
               @endforeach <!-- sidebar menu: end menu child -->
             </ul>
             @endif
