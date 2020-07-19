@@ -60,6 +60,7 @@ $user = Auth::user();
                                 <th>Mô tả</th>
                                 <th>Sửa</th>
                                 <th>Xóa</th>
+                                <th>Cấp quyền</th>
                             </tr>
                         </thead>
                         <tbody>
@@ -83,6 +84,7 @@ $user = Auth::user();
                                 <td>
                                     <a class="btn btn-danger" onclick="destroyRole('{{$role->id}}')">Xóa</a>
                                 </td>
+                                <td><a href="">Cấp quyền</a></td>
                             </tr>
                             @endforeach
                         </tbody>

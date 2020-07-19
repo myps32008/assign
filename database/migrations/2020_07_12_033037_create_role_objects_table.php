@@ -15,9 +15,9 @@ class CreateRoleObjectsTable extends Migration
     {
         Schema::create('role_object', function (Blueprint $table) {
             $table->integer('object_id')->unsigned();
-            $table->foreign('object_id')->references('id')->on('objects');
+            $table->foreign('object_id')->references('id')->on('objects')->onDelete('cascade');
             $table->integer('role_id')->unsigned();
-            $table->foreign('role_id')->references('id')->on('roles');
+            $table->foreign('role_id')->references('id')->on('roles')->onDelete('cascade');
             $table->boolean('status')->default(true);
             $table->string('created_by', 50)->nullable();            
             $table->timestamps();

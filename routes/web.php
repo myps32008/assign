@@ -33,16 +33,26 @@ Route::group(['middleware' => ['check_auth', 'admin_menu']], function () {
     Route::get('objects/updateShow', 'ObjectController@updateShow')->name('update.menu.show');
     Route::get('objects/updateMenu', 'ObjectController@updateMenu')->name('objects.updateNew');
     Route::get('objects/deleteMenu', 'ObjectController@deleteMenu')->name('objects.deleteNew');
-    Route::resource('objects', 'ObjectController');
+    
     Route::get('roles', 'RoleController@index')->name('role.index');
     Route::get('roles/store', 'RoleController@store')->name('role.store');
     Route::get('roles/destroy', 'RoleController@destroy')->name('role.delete');
     Route::get('roles/edit', 'RoleController@edit')->name('role.edit');
     Route::get('roles/status', 'RoleController@updateStatus')->name('role.update.status');
-    Route::get('/dashboard', 'AdminController@show_dashboard')->name('show_dashboard');    
+
+    Route::get('role_user/{id}', 'Role_UserController@index')->name('role_user.index');
+
+    Route::get('role_object/{id}', 'Role_ObjectController@index')->name('role_object.index');
+
+    Route::get('users', 'UserController@index')->name('user.index');
+    Route::get('users/status', 'UserController@updateStatus')->name('user.status');
+    Route::get('user/delete', 'UserController@destroy')->name('user.delete');
+    Route::get('user/edit', 'UserController@edit')->name('user.edit');
+    Route::get('/dashboard', 'AdminController@show_dashboard')->name('show_dashboard');
+    
+    Route::resource('objects', 'ObjectController');
 });
-Route::group(['middleware' => 'admin_menu'], function () {
-});
+
 Route::get('/logout', 'AdminController@logout')->name('admin.logout');
 Route::get('/UnAuthenticate', function () {
     return view('UnAuthenticate');
