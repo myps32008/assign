@@ -97,14 +97,14 @@ $user = Auth::user();
                 <td><input type="text" value="{{ $url->object_name }}" id="name-{{$url->id}}"></td>
                 <td><input type="text" value="{{ $url->object_url }}" id="url-{{$url->id}}"></td>
                 <td><input type="text" value="{{ $url->description }}" id="descr-{{$url->id}}"></td>
-                <td><a class="status" id="status-{{ $url->id }}" onclick="update('{{$url->id}}', 1)">
+                <td><a class="status" id="status-{{ $url->id }}" onclick="updateShow('{{$url->id}}', 1)">
                     @if($url->status)
                     Hoạt động
                     @else
                     Không hoạt động
                     @endif
                   </a></td>
-                <td><a class="status" id="show-{{ $url->id }}" onclick="update('{{$url->id}}', 2)">
+                <td><a class="status" id="show-{{ $url->id }}" onclick="updateShow('{{$url->id}}', 2)">
                     @if($url->show_menu)
                     Hoạt động
                     @else
@@ -125,10 +125,10 @@ $user = Auth::user();
                   </select>
                 </td>
                 <td>
-                  <a id="edit-{{$url->id}}" class="btn btn-primary">Sửa</a>
+                  <a id="edit-{{$url->id}}" class="btn btn-primary" onclick="editMenu('{{$url->id}}')">Sửa</a>
                 </td>
                 <td>
-                  <a class="btn btn-danger" onclick="destroyMenu('{{$url->id}}')" >Xóa</a>
+                  <a class="btn btn-danger" onclick="destroyMenu('{{$url->id}}')">Xóa</a>
                 </td>
               </tr>
               @endforeach
@@ -165,7 +165,7 @@ $idMenu
       }
     });
   };
-  var update = function(idMenu, type) {
+  var updateShow = function(idMenu, type) {
     var urlink;
     var model;
     if (type == 2) {
@@ -206,11 +206,31 @@ $idMenu
       },
       success: function(result) {
         $('#message').text(result.message);
-        if (result.status == 200) {          
+        if (result.status == 200) {
           $("#" + idMenu).remove();
         }
       }
     });
   } //end function destroyMenu
+
+  var editMenu = function(idMenu) {
+    $.ajax({
+      url: "{{ route('objects.updateNew') }}",
+      method: 'GET',
+      data: {
+        id: idMenu,
+        parent_id: $('#parent-' + idMenu).val(),
+        object_code: $('#code-' + idMenu).val(),
+        object_name: $('#name-' + idMenu).val(),
+        menu_name: $('#menu-' + idMenu).val(),
+        object_url: $('#url-' + idMenu).val(),
+        description: $('#descr-' + idMenu).val(),
+        object_level: $('#updatelevel-' + idMenu).val()
+      },
+      success: function(result) {
+        $('#message').text(result.message);        
+      }
+    });
+  };
 </script>
 @endsection

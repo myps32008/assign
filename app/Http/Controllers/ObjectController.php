@@ -165,12 +165,35 @@ class ObjectController extends Controller
             $menu->delete();
         } catch (\Throwable $th) {
             return Response()->json([
-                'message' => "Xoá menu thất bại: ".$th->getMessage(),
+                'message' => "Xoá menu thất bại: " . $th->getMessage(),
                 'status' => 404
             ]);
         }
         return Response()->json([
             'message' => "Xoá thành công",
+            'status' => 200
+        ]);
+    }
+    public function updateMenu(Request $request)
+    {
+        try {
+            $menu = Objects::find($request->get('id'));
+            $menu->object_name = $request->get('object_name');
+            $menu->parent_id = $request->get('parent_id');
+            $menu->menu_name = $request->get('menu_name');
+            $menu->object_url = $request->get('object_url');
+            $menu->description = $request->get('description');
+            $menu->object_level = $request->get('object_level');
+            $menu->object_code = $request->get('object_code');
+            $menu->save();
+        } catch (\Throwable $th) {
+            return Response()->json([
+                'message' => "Sửa đổi thất bại: " . $th->getMessage(),
+                'status' => 400
+            ]);
+        }
+        return Response()->json([
+            'message' => "Sửa đổi thành công",
             'status' => 200
         ]);
     }

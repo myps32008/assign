@@ -28,29 +28,12 @@ class User extends Authenticatable
     public function accessMenu()
     {
         if ($this->username === 'administrator') {
-            return DB::table('objects')
-                ->select(
-                    'objects.parent_id',
-                    'objects.object_url',
-                    'objects.object_name',
-                    'objects.object_level',
-                    'objects.status',
-                    'objects.show_menu',
-                    'objects.menu_name'
-                )->get();
+            return Objects::with('childMenu')->get();
         }
         return DB::table('role_users')->where('user_id', $this->id)
             ->join('role_object', 'role_users.role_id', '=', 'role_object.object_id')
             ->join('objects', 'role_object.object_id', '=', 'objects.id')
-            ->select(
-                'objects.parent_id',
-                'objects.object_url',
-                'objects.object_name',
-                'objects.object_level',
-                'objects.status',
-                'objects.show_menu',
-                'objects.menu_name'
-            )
+            ->select(Objects::class)
             ->distinct()->get();
     }
 }
